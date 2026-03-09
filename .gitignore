@@ -6,7 +6,9 @@ __pycache__/
 input_videos/
 *.mp4
 *.avi
-
+output_videos/
+*.mp4
+*.avi
 # Veri Setleri 
 training/football-players-detection-*/test/
 training/football-players-detection-*/train/
