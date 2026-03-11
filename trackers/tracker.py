@@ -1,6 +1,7 @@
 from ultralytics import YOLO
 import supervision as sv
 import numpy as np
+import pandas as pd
 import pickle
 import os
 import sys
@@ -17,6 +18,20 @@ class Tracker:
             lost_track_buffer=90, # frames to keep "lost" tracks alive 
             minimum_matching_threshold=0.8
         )
+
+    def interpolate_ball_position(self, ball_positions):
+        ball_positions = [x.get(1,{}).get("bbox", []) for x in ball_positions]
+        df_ball_positions = pd.DataFrame(ball_positions, columns=["x1", "y1", "x2", "y2"])
+
+        #interpolate missing values
+        df_ball_positions = df_ball_positions.interpolate()
+        df_ball_positions = df_ball_positions.bfill()
+
+        ball_positions = [{1: {"bbox": x}} for x in df_ball_positions.to_numpy().tolist()]
+        
+        return ball_positions
+
+
     def detect_frames(self, frames):
         batch_size = 20
         detections = []
@@ -154,7 +169,8 @@ class Tracker:
 
             # Draw player tracks
             for track_id, player in player_dict.items():
-                frame = self.draw_ellipse(frame, player["bbox"], (0, 255, 0), track_id)
+                color = player.get("team_color",(0,0,255))
+                frame = self.draw_ellipse(frame, player["bbox"], color, track_id)
 
 
             # Draw Referee
@@ -166,3 +182,5 @@ class Tracker:
                 frame = self.draw_traingle(frame, ball["bbox"],(0,255,0))
             output_vidoe_frames.append(frame)
         return output_vidoe_frames
+
+
