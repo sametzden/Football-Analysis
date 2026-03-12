@@ -1,10 +1,12 @@
 from utils import read_video, save_video
 from trackers import Tracker
+import numpy as np
 import cv2
 from team_assigner import TeamAssigner
+from player_ball_assigner import PlayerBallAssigner
 def main():
     #read video
-    video_frames = read_video('input_videos/test (13).mp4')
+    video_frames = read_video('input_videos/D35bd9041_1 (34).mp4')
 
     tracker = Tracker("models/best.pt")
 
@@ -26,16 +28,31 @@ def main():
             tracks["players"][frame_num][player_id]["team"] = team
             tracks["players"][frame_num][player_id]["team_color"] = team_assigner.team_colors[team]
 
+
+    # Assign ball to players
+    player_assigner = PlayerBallAssigner()
+    team_ball_control = []
+    for frame_num, player_track in enumerate(tracks["players"]):
+        ball_bbox = tracks["ball"][frame_num][1]["bbox"]
+        assigned_player = player_assigner.assign_ball_to_players(player_track, ball_bbox)
+        
+        if assigned_player != -1:
+            tracks["players"][frame_num][assigned_player]["has_ball"] = True
+            team_ball_control.append(tracks["players"][frame_num][assigned_player]["team"])
+        else:
+            team_ball_control.append(team_ball_control[-1]) 
+            # if no player is assigned to the ball, we assume 
+            # the team in control is the same as the previous frame
+    team_ball_control = np.array(team_ball_control)
+
+
+
     # Draw output
-    output_video_frames = tracker.draw_annotations(video_frames, tracks)
+    output_video_frames = tracker.draw_annotations(video_frames, tracks, team_ball_control)
 
     #save video
-    save_video(output_video_frames, 'output_videos/processed_video_test(13).avi')
+    save_video(output_video_frames, 'output_videos/D35bd9041_1 (34).avi')
  
-
-
-
-
 
 if __name__ == "__main__":
     main()
