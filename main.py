@@ -4,14 +4,24 @@ import numpy as np
 import cv2
 from team_assigner import TeamAssigner
 from player_ball_assigner import PlayerBallAssigner
+from camera_movement_estimator import CameraMovementEstimator
 def main():
     #read video
-    video_frames = read_video('input_videos/D35bd9041_1 (34).mp4')
+    video_frames = read_video('input_videos/08fd33_4.mp4')
 
     tracker = Tracker("models/best.pt")
 
     tracks = tracker.get_object_tracks(video_frames,read_from_stub=False, stub_path="stubs/track_stubs.pkl")
 
+    #get object positions
+    tracker.add_position_to_tracks(tracks)
+
+    # camera movement estimator
+    camera_movement_estimator = CameraMovementEstimator(video_frames[0])
+    camera_movement_per_frame = camera_movement_estimator.get_camera_movement(video_frames,
+                                                                            read_from_stub=False, 
+                                                                            stub_path="stubs/camera_movement_stubs.pkl")
+    camera_movement_estimator.add_adjust_positions_to_tracks(tracks, camera_movement_per_frame)
     # interpolate ball positions
     tracks["ball"] = tracker.interpolate_ball_position(tracks["ball"])
 
@@ -50,8 +60,10 @@ def main():
     # Draw output
     output_video_frames = tracker.draw_annotations(video_frames, tracks, team_ball_control)
 
+    # draw camera movement
+    output_video_frames = camera_movement_estimator.draw_camera_movement(output_video_frames, camera_movement_per_frame)
     #save video
-    save_video(output_video_frames, 'output_videos/D35bd9041_1 (34).avi')
+    save_video(output_video_frames, 'output_videos/08fd33_4_camera_movement.avi')
  
 
 if __name__ == "__main__":
