@@ -43,6 +43,7 @@ def main():
     team_assigner = TeamAssigner()
     team_assigner.assign_team_color(video_frames[0], tracks["players"][0])
 
+    frame_width = video_frames[0].shape[1]  # used for goalkeeper position heuristic
 
     for frame_num, player_track in enumerate(tracks["players"]):
         for player_id, track in player_track.items():
@@ -50,6 +51,18 @@ def main():
             tracks["players"][frame_num][player_id]["team"] = team
             tracks["players"][frame_num][player_id]["team_color"] = team_assigner.team_colors[team]
 
+    # Assign goalkeepers to teams (position-based: left half → team 1, right half → team 2)
+    for frame_num, goalkeeper_track in enumerate(tracks["goalkeepers"]):
+        for goalkeeper_id, track in goalkeeper_track.items():
+            team = team_assigner.get_goalkeeper_team(
+                video_frames[frame_num], track["bbox"], goalkeeper_id, frame_width
+            )
+            tracks["goalkeepers"][frame_num][goalkeeper_id]["team"] = team
+            tracks["goalkeepers"][frame_num][goalkeeper_id]["team_color"] = team_assigner.team_colors[team]
+
+    # Stitch fragmented player tracks and fill missing frames
+    tracker.merge_fragmented_tracks(tracks)
+    tracker.interpolate_missing_frames(tracks)
 
     # Assign ball to players
     player_assigner = PlayerBallAssigner()
@@ -79,7 +92,7 @@ def main():
     output_video_frames = speed_and_distance_estimator.draw_speed_and_distance(output_video_frames, tracks)
 
     #save video
-    save_video(output_video_frames, 'output_videos/08fd33_4_camera_movement.avi')
+    save_video(output_video_frames, 'output_videos/08fd33_4_bot-sort.avi')
  
 
 if __name__ == "__main__":

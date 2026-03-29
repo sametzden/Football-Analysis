@@ -1,26 +1,37 @@
 # Python Sanal Ortamları
 cv_env/
 __pycache__/
+*.pyc
 
 # Girdi ve Çıktı Videoları
 input_videos/
-*.mp4
-*.avi
 output_videos/
 *.mp4
 *.avi
-# Veri Setleri 
-training/football-players-detection-*/test/
-training/football-players-detection-*/train/
-training/football-players-detection-*/valid/
 
-# YOLO Model Ağırlıkları (
+# Veri Setleri ve Arşivler
+*.zip
+*.tar
+*.gz
+training/football-players-detection-*/
+!training/football-players-detection-*/data.yaml
+!training/football-players-detection-*/data_abs.yaml
+datasets/
+
+# Stubs (Önbellek - Cache)
+stubs/
+*.pkl
+
+# YOLO Model Ağırlıkları
 *.pt
 models/
 
 # YOLO Eğitim ve Tahmin Logları
 runs/
 training/runs/
+ultralytics/
 
 # Jupyter Notebook Sistem Dosyaları
 .ipynb_checkpoints/
+.pytest_cache/
+.vscode/
