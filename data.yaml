@@ -1,0 +1,8 @@
+# YOLOv8 Veri Seti Konfigürasyonu
+path: . # Ana dizin
+train: ./yolo_dataset/images/val  # Şimdilik val verisini train olarak kullanıyoruz
+val: ./yolo_dataset/images/val    # Doğrulama için de aynısını kullanıyoruz
+
+# Sınıf Bilgileri
+nc: 1
+names: ['player']

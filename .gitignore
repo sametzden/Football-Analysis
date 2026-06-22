@@ -1,0 +1,67 @@
+# ── Python ──────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# ── Virtual Environment ──────────────────────
+.venv/
+venv/
+env/
+
+# ── Model Ağırlıkları (büyük dosyalar) ───────
+*.pt
+*.pth
+*.onnx
+
+# ── Video Dosyaları ──────────────────────────
+*.mp4
+*.avi
+*.mov
+output_videos/
+
+# ── Veri Seti ────────────────────────────────
+data/
+yolo_dataset/
+yolo_dataset.zip
+
+# ── Stub / Cache ─────────────────────────────
+stubs/
+*.pkl
+
+# ── Sunum / Rapor Dosyaları ──────────────────
+*.pptx
+*.docx
+*.pdf
+poster_sunum.html
+proje_gelisim_raporu.md
+create_poster_pptx.py
+fill_report.py
+Kırıkkale_üniversitesi_yeni_logosu.jpeg
+
+# ── Geçici / Test Dosyaları ──────────────────
+test_gorsellestirme.jpg
+ekran_goruntusu.png
+"Ekran Görüntüsü - 2026-06-01 14-43-50.png"
+yolo26n.pt
+yolov8n.pt
+data.py
+colab.ipynb
+
+# ── Orijinal Ham Videolar ────────────────────
+08fd33_4.mp4
+SNGS-*.mp4
+
+# ── Makale PDF'leri ──────────────────────────
+*.pdf
+
+# ── DOCX şablonları ──────────────────────────
+757238*.DOCX
+
+# ── IDE / OS ─────────────────────────────────
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
