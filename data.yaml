@@ -1,8 +1,14 @@
-# YOLOv8 Veri Seti Konfigürasyonu
-path: . # Ana dizin
-train: ./yolo_dataset/images/val  # Şimdilik val verisini train olarak kullanıyoruz
-val: ./yolo_dataset/images/val    # Doğrulama için de aynısını kullanıyoruz
+# YOLOv8 Veri Seti Konfigürasyonu — SoccerNet GSR-2025
+# Model Google Colab A100 GPU üzerinde 50 epoch eğitildi (1280x1280 giriş)
+path: .
+train: ./yolo_dataset/images/train
+val: ./yolo_dataset/images/val
 
-# Sınıf Bilgileri
-nc: 1
-names: ['player']
+# Sınıf Bilgileri (5 sınıf)
+nc: 5
+names:
+  0: player
+  1: goalkeeper
+  2: referee
+  3: ball
+  4: other
